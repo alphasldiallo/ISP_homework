@@ -1,21 +1,6 @@
-P5Q1.py
-Today
-3:22 PM
 
-Ana María Acevedo Saenz shared an item
-Text
-P5Q1.py
-
-Can edit
-You
-Can view
-Anyone with the link
-3:18 PM
-
-Ana María Acevedo Saenz uploaded an item
-Text
-P5Q1.py
 import operator
+import re
 
 #f = open('ciphertext.txt', 'r')
 #ctext = f.read()
