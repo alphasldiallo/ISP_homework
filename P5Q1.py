@@ -1,5 +1,6 @@
 
 import operator
+import enchant
 
 
 #f = open('ciphertext.txt', 'r')
@@ -14,7 +15,8 @@ alphabet_1 =  ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','
 c_special =['!', ''" "'','"', '#', '$', '%', '&', '(',')', '*' ,'+',',', '_','.', '/', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':',';','=', '?', '@', '[', ']','', '^', '_', '{', '|', '}', '~',"'", '-']
 dico_ct ={}
 result1 = ()
-
+count = 0
+list_decipher = []
 print ("alphabet", alphabet_array[5])
 
 for letter in ctext.lower():
@@ -39,29 +41,48 @@ print (int(alphabet[(list[0])]))
 # b =  C - m mod 26
 # C = position de la lettre qui plus se repete    m = position de la lettre qui stadistiquement se repete le plus dans l'alphabet anglais
 
-#for lt in alphabet_1:
-#    letra= alphabet['e']
-#    print("LT", lt)
- #   b = ((int(alphabet[list[0]])) - (int(alphabet[alphabet_1[4]]))) % 26
+for lk in alphabet:
+    lettre_key = alphabet[lk]
+    print("lettre_key",lettre_key)
+    print("LK", lk)
 
-print ("position ", alphabet_array.index("f"))
+    b = ((int(alphabet[list[0]])) - int(lettre_key)) % 26
+    print("B = ", b)
+#print ("position ", alphabet_array.index("f"))
 
-for i in alphabet_array:
-    b = ((int(alphabet[list[0]]))-(int(alphabet(alphabet_array[i]))))%26
-    b = 19
+#for i in alphabet_array:
+#    b = ((int(alphabet[list[0]]))-(int(alphabet(alphabet_array[i]))))%26
+ #   b = 19
     #print ("B = ",b)
 
 
-result1 = alphabet_1[b:] + alphabet_1[:b]
-print("result1", result1)
+    result1 = alphabet_1[b:] + alphabet_1[:b]
+    print("result1", result1)
 
-decipher = dict(zip(result1,alphabet))
-print ("decipher",decipher)
+    decipher = dict(zip(result1,alphabet))
+    print ("decipher",decipher)
 
-translatable = str.maketrans(decipher)
-print(str.translate(ctext.lower(), translatable))
+    translatable = str.maketrans(decipher)
+    print(str.translate(ctext.lower(), translatable))
 
+    words_tr = (str.translate(ctext.lower(), translatable))
+    print(words_tr.split(" "))
+    list_decipher = (words_tr.split(" "))
+    print("cantidad palabras",len(list_decipher))
+    count = 0
 
+    for candidate_word in list_decipher:
+       # print ("candidate_word",candidate_word)
+        d = enchant.Dict("en_US")
+        answer = d.check(candidate_word)
+       # print("answer",answer)
+        if answer == True:
+           count += 1
+           print("count", count)
+           if count > (len(list_decipher)-10):
+            break
+
+    print("words_tr",words_tr)
 
 
 
