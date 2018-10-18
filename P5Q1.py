@@ -43,21 +43,15 @@ print (int(alphabet[(list[0])]))
 # b =  C - m mod 26
 # C = position de la lettre qui plus se repete    m = position de la lettre qui stadistiquement se repete le plus dans l'alphabet anglais
 
-# Applaiquer la formule
+# Appliquer la formule
 for lk in alphabet:
 
         lettre_key = alphabet[lk]
         print("lettre_key",lettre_key)
-#        print("LK", lk)
 
         b = ((int(alphabet[list[0]])) - int(lettre_key)) % 26
         print("B = ", b)
-    #print ("position ", alphabet_array.index("f"))
 
-    #for i in alphabet_array:
-    #    b = ((int(alphabet[list[0]]))-(int(alphabet(alphabet_array[i]))))%26
-     #   b = 19
-        #print ("B = ",b)
 
 # transposer l'alphabet et dechiffer le texte pour le minuscule
         result1 = alphabet_1[b:] + alphabet_1[:b]
