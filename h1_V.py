@@ -34,11 +34,7 @@ class caesar:
         print("c = ",int(caesar.alphabet[(list[0])]))
         return list[0]
 
-#for lk in letter_frequency_english:
-#        print("Frequency letter: ",lk)
-#        b = int(alphabet[lk])
-#        print("B = ", b)
-    #A = caesar
+
     def attack(b):
         # transposer l'alphabet et dechiffer le texte pour le minuscule
                 result1 = caesar.alphabet_1[b:] + caesar.alphabet_1[:b]
