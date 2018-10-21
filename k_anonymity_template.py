@@ -10,41 +10,33 @@ AGE_GRANULARITY = 10
 def reidentify_patient(record_hospital, record_voter):
     print(record_hospital)
     i = 0
-    x = 0
+#    x = 0
+    list_match = []
     while i < len(record_hospital):
         gender = record_hospital[i]['gender']
-        print(gender)
+        print("gender", gender)
         age = record_hospital[i]['age']
         zipcode = record_hospital[i]['zipcode']
-
+        codition = record_hospital[i]['condition']
+        x=0
     # TODO Find the matching record in voters that has the same gender,age and zipcode
-
         while x < len(record_voter):
+            name_v = record_voter[x]['name']
             gender_v = record_voter[x]['gender']
-            print(gender_v)
+            print("gender_v", gender_v)
             age_v = record_voter[x]['age']
             zipcode_v = record_voter[x]['zipcode']
 
-    # TODO If exactly one match found, re-identification is successful, set success_ variable to True; otherwise to False
-#            if gender == gender_v and age == age_v and zipcode == zipcode_v:
-    # TODO Save the matching voting record in a variable called record_voter
-#               success_ = True
-#               print(success_)
-#            else:
-#                success_ = False # TODO DELETE THIS LINE
-
-#            if success_:
-#                return True
-       #            return True, record_voter[x]['name'] + ': ' + record_hospital[i]['condition']
-#                print("hola: ", record_voter[x]['name'] + ': ' + record_hospital[i]['condition'])
-#            else:
-#                    return False, ''
-#                    print(success_)
             x += 1
-            print("x:",x)
-        i += 1
-        print("i", i)
+            print("x", x)
 
+        i += 1
+        print("i:", i)
+
+    # TODO If exactly one match found, re-identification is successful, set success_ variable to True; otherwise to False
+        if gender == gender_v and age == age_v and zipcode == zipcode_v:
+            print("list_mach", list_match)
+            list_match = [name_v][codition]
 
 
 def generalize_gender(gender: str, level: int):
