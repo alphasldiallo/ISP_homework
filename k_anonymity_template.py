@@ -8,37 +8,50 @@ AGE_GRANULARITY = 10
 
 
 def reidentify_patient(record_hospital, record_voter):
-    print(record_hospital)
+    #print(record_hospital)
     i = 0
 #    x = 0
-    dico_match = {}
+    dico_match = {name}
+    dico_match["name_v"] = ""
+    dico_match["condition"] = ""
+    dico_match["zipcode"] = ""
+
     while i < len(record_hospital):
         gender = record_hospital[i]['gender']
-        print("gender", gender)
+        #print("gender", gender)
         age = record_hospital[i]['age']
         zipcode = record_hospital[i]['zipcode']
-        codition = record_hospital[i]['condition']
+        condition = record_hospital[i]['condition']
         x=0
     # TODO Find the matching record in voters that has the same gender,age and zipcode
         while x < len(record_voter):
             name_v = record_voter[x]['name']
             gender_v = record_voter[x]['gender']
-            print("gender_v", gender_v)
+            #print("gender_v", gender_v)
             age_v = record_voter[x]['age']
             zipcode_v = record_voter[x]['zipcode']
 
             # TODO If exactly one match found, re-identification is successful, set success_ variable to True; otherwise to False
             if gender == gender_v and age == age_v and zipcode == zipcode_v:
-                print("list_mach", dico_match)
-                dico_match = {name_v:codition}
+                #print("list_mach", dico_match)
+                #print ("We got {}".format(name_v))
+                #dico_match["name_v"] = name_v
+                #dico_match["condition"] = condition
+                #dico_match["zipcode"] = zipcode
+
+                dico_match["name_v"].__add__(name_v)
+                dico_match["condition"].__add__(condition)
+                dico_match["zipcode"].__add__(zipcode)
 
             x += 1
-            print("x", x)
+            #print("x", x)
 
         i += 1
-        print("i:", i)
-        for x, y in dico_match.items():
-            print(x, y)
+
+        #print("i:", i)
+    print("Our dict has {} values".format(len(dico_match)))
+    for x, y in dico_match.items():
+        print(x, y)
 
 
 
