@@ -11,7 +11,7 @@ def reidentify_patient(record_hospital, record_voter):
     print(record_hospital)
     i = 0
 #    x = 0
-    list_match = []
+    dico_match = {}
     while i < len(record_hospital):
         gender = record_hospital[i]['gender']
         print("gender", gender)
@@ -27,16 +27,21 @@ def reidentify_patient(record_hospital, record_voter):
             age_v = record_voter[x]['age']
             zipcode_v = record_voter[x]['zipcode']
 
+            # TODO If exactly one match found, re-identification is successful, set success_ variable to True; otherwise to False
+            if gender == gender_v and age == age_v and zipcode == zipcode_v:
+                print("list_mach", dico_match)
+                dico_match = {name_v:codition}
+
             x += 1
             print("x", x)
 
         i += 1
         print("i:", i)
+        for x, y in dico_match.items():
+            print(x, y)
 
-    # TODO If exactly one match found, re-identification is successful, set success_ variable to True; otherwise to False
-        if gender == gender_v and age == age_v and zipcode == zipcode_v:
-            print("list_mach", list_match)
-            list_match = [name_v][codition]
+
+
 
 
 def generalize_gender(gender: str, level: int):
