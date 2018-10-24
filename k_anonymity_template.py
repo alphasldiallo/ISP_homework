@@ -3,7 +3,6 @@
 import math
 import csv
 import copy
-from collections import OrderedDict
 from fractions import Fraction
 
 AGE_GRANULARITY = 10
@@ -98,71 +97,21 @@ def generalize_database(records, level_gender, level_age, level_zipcode):
 
 
 def compute_anonymity_level(records, quasi_identifiers):
-    k=n=0
-    n = []
-    nr = []
+    # TODO implement this method
+    # k = ...
 
-    #Get all the keys
-    for i in records:
-        l=i.keys()
-
-    l2 = list(l)
-
-    age = []
-    zipcode = []
-
-    #Read records
-    for i in range (0, len(records)):
-        new_records = OrderedDict()
-        for ii in range (len(quasi_identifiers)):
-            v = str (quasi_identifiers[ii])
-            new_records[quasi_identifiers[ii]] = records.__getitem__(i)[v]
-        nr.append(new_records)
-
-    print ("new record = {}".format(nr))
-
-
-    #print (records[1][l2[0]])
-
-    #for i in range (0, len(l2)):
-        #for ii in range (0)
-        #print(l2[i])
-
-
-    """
-    for i in range (0, len(records)):
-        print ("data of this small db {}".format(records.__getitem__(i)["age"]))
-        age = records.__getitem__(i)["age"]
-        a= records.__getattribute__(i)
-        print("a = ".format(a))
-        gender = records.__getitem__(i)["gender"]
-        code_zip = records.__getitem__(i)["zipcode"]
-
-        for i in range(0, len(quasi_identifiers)):
-            #print("data of this small db {}".format(quasi_identifiers.__getitem__(i)["age"]))
-            age_QI = quasi_identifiers.__getitem__(i)["age"]
-            gender_QI = quasi_identifiers.__getitem__(i)["gender"]
-            code_zip_QI = quasi_identifiers.__getitem__(i)["zipcode"]
-
-            #if age == age_QI and gender == gender_QI and code_zip == code_zip_QI:
-
-"""
+    k = -1 # TODO DELETE THIS LINE
     return k
-
 
 
 def compute_distortion(levels, max_levels):
     assert len(max_levels) == len(levels)
     # TODO implement this method
     # d = ...
-    print(math.modf(Fraction(1, len(max_levels)) * (
-                Fraction(levels[0], max_levels[0]) + Fraction(levels[1], max_levels[1]) + Fraction(levels[2],
-                                                                                                   max_levels[2])))[0])
-    d = math.modf(Fraction(1, len(max_levels)) * (
-                Fraction(levels[0], max_levels[0]) + Fraction(levels[1], max_levels[1]) + Fraction(levels[2],
-                                                                                                   max_levels[2])))[0]
+    print(math.modf(Fraction(1, len(max_levels)) * (Fraction(levels[0], max_levels[0]) + Fraction(levels[1], max_levels[1]) + Fraction(levels[2], max_levels[2])))[0])
+    d = math.modf(Fraction(1, len(max_levels)) * (Fraction(levels[0], max_levels[0]) + Fraction(levels[1], max_levels[1]) + Fraction(levels[2],max_levels[2])))[0]
 
-    # d = -1 # TODO DELETE THIS LINE
+    #d = -1 # TODO DELETE THIS LINE
     return d
 
 
@@ -175,7 +124,6 @@ if __name__ == '__main__':
         reader = csv.DictReader(csvfile, dialect=dialect)
         voters_records = [record for record in reader]
 
-
         #print (voters_records[0])
     # for record in voters_records:
     #    print(record['name'], record['gender'], record['age'], record['zipcode'])
@@ -185,24 +133,15 @@ if __name__ == '__main__':
         csvfile.seek(0)
         reader = csv.DictReader(csvfile, dialect=dialect)
         hospital_records = [record for record in reader]
+
         age = []
+
         for i in hospital_records:
             age.append(i["age"])
 
 
-    liste = []
-    liste.append(hospital_records[19])
-    liste.append(hospital_records[1])
-    liste.append(hospital_records[12])
-    liste.append(hospital_records[4])
-
-
-    print ("liste 10 hospital {}".format(liste))
-    qid = ["gender", "age", "condition"]
-
-    compute_anonymity_level(hospital_records, qid)
-
     print(generalize_zipcode("1170", 4))
+
 
     # Question 1
 
@@ -217,6 +156,9 @@ if __name__ == '__main__':
 
 
     # Questions 2 -> 6
+
+    # question 5
+    compute_distortion([1, 1, 2], [1, 3, 4])
 
     k_target = 5
 
