@@ -98,15 +98,9 @@ def generalize_database(records, level_gender, level_age, level_zipcode):
 
 
 def compute_anonymity_level(records, quasi_identifiers):
-    k=n=0
-    n = []
-    nr = []
-
-    #Get all the keys
-    for i in records:
-        l=i.keys()
-
-    l2 = list(l)
+    n=0
+    k = []
+    nr = [] #nr = New records = liste épurée
 
     age = []
     zipcode = []
@@ -120,6 +114,33 @@ def compute_anonymity_level(records, quasi_identifiers):
         nr.append(new_records)
 
     print ("new record = {}".format(nr))
+
+    # Get all the keys
+    for i in nr:
+        l = i.keys()
+    l2 = list(l)
+
+    # Lecture de records
+    for i in range (0, len (nr)):
+        #print(len(nr))
+        # Comparaison avec les autres records (new records)
+        for ii in range (0, len (l2)):
+            n = 0
+            #print ("{} is {}".format(l2[ii], nr.__getitem__(i)[l2[ii]]))
+            for x in range(0, len(nr)):
+                # Cette boucle permet de comparer
+                temp_n = 0
+                for ii in range(0, len(l2)):
+                    # On récupère uniquement les valeurs identiques
+                    if nr.__getitem__(i)[l2[ii]] == nr.__getitem__(x)[l2[ii]]:
+                        temp_n+=1
+                        if temp_n == 3:
+                            print ("Valeur identique: {} = {}".format(nr.__getitem__(i), nr.__getitem__(x)))
+                            n+=1
+        k.append(n)
+
+    print ("K = {}".format(k))
+
 
 
     #print (records[1][l2[0]])
@@ -197,8 +218,7 @@ if __name__ == '__main__':
     liste.append(hospital_records[4])
 
 
-    print ("liste 10 hospital {}".format(liste))
-    qid = ["gender", "age", "condition"]
+    qid = ["gender", "age", "zipcode"]
 
     compute_anonymity_level(hospital_records, qid)
 
