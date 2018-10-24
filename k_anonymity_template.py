@@ -3,57 +3,36 @@
 import math
 import csv
 import copy
+from fractions import Fraction
 
 AGE_GRANULARITY = 10
 
 
-def reidentify_patient(record_hospital, record_voter):
-    #print(record_hospital)
-    i = 0
-#    x = 0
-    dico_match = {name}
-    dico_match["name_v"] = ""
-    dico_match["condition"] = ""
-    dico_match["zipcode"] = ""
-
-    while i < len(record_hospital):
-        gender = record_hospital[i]['gender']
-        #print("gender", gender)
-        age = record_hospital[i]['age']
-        zipcode = record_hospital[i]['zipcode']
-        condition = record_hospital[i]['condition']
-        x=0
+def reidentify_patient(record_hospital):
+    gender = record_hospital['gender']
+    age = record_hospital['age']
+    zipcode = record_hospital['zipcode']
+    success = False
+    data = ""
     # TODO Find the matching record in voters that has the same gender,age and zipcode
-        while x < len(record_voter):
-            name_v = record_voter[x]['name']
-            gender_v = record_voter[x]['gender']
-            #print("gender_v", gender_v)
-            age_v = record_voter[x]['age']
-            zipcode_v = record_voter[x]['zipcode']
+    # TODO If exactly one match found, re-identification is successful, set success_ variable to True; otherwise to False
+    # TODO Save the matching voting record in a variable called record_voter
 
-            # TODO If exactly one match found, re-identification is successful, set success_ variable to True; otherwise to False
-            if gender == gender_v and age == age_v and zipcode == zipcode_v:
-                #print("list_mach", dico_match)
-                #print ("We got {}".format(name_v))
-                #dico_match["name_v"] = name_v
-                #dico_match["condition"] = condition
-                #dico_match["zipcode"] = zipcode
+    with open('voters.txt') as csvfile:
+        dialect = csv.Sniffer().sniff(csvfile.read(1024))
+        csvfile.seek(0)
+        reader = csv.DictReader(csvfile, dialect=dialect)
 
-                dico_match["name_v"].__add__(name_v)
-                dico_match["condition"].__add__(condition)
-                dico_match["zipcode"].__add__(zipcode)
+        # Check if the data matches the records of voters
+        for record in reader:
+            if gender == record["gender"] and age == record["age"] and zipcode == record["zipcode"]:
+                success=True
+                data = record["name"] + ": " + record_hospital["condition"]
 
-            x += 1
-            #print("x", x)
-
-        i += 1
-
-        #print("i:", i)
-    print("Our dict has {} values".format(len(dico_match)))
-    for x, y in dico_match.items():
-        print(x, y)
-
-
+    if success:
+        return True, data
+    else:
+        return False
 
 
 
@@ -81,13 +60,27 @@ def generalize_age(age: int, level: int):
         return '*'
 
 
+#Question 3
 def generalize_zipcode(zipcode: str, level: int):
     assert (type(level) is int and level >= 0)
-    #TODO implement this method using the provided VGH
-    # result = ...
+    assert (type(zipcode)) is str and zipcode != ""
 
-    result = '*' # TODO DELETE THIS LINE
-    return result
+    if level == 0:
+        return zipcode
+
+    # TODO implement this method using the provided VGH
+    elif 0 < level <= len(zipcode):
+        ast = ""
+        i=0
+        while i < level:
+            i += 1
+            ast += "*"
+        zipcode = zipcode[:-level]+ast
+        return zipcode
+    else:
+        return "Error: define another value for level"
+
+
 
 
 def generalize_record(record, level_gender, level_age, level_zipcode):
@@ -115,18 +108,23 @@ def compute_distortion(levels, max_levels):
     assert len(max_levels) == len(levels)
     # TODO implement this method
     # d = ...
+    print(math.modf(Fraction(1, len(max_levels)) * (Fraction(levels[0], max_levels[0]) + Fraction(levels[1], max_levels[1]) + Fraction(levels[2], max_levels[2])))[0])
+    d = math.modf(Fraction(1, len(max_levels)) * (Fraction(levels[0], max_levels[0]) + Fraction(levels[1], max_levels[1]) + Fraction(levels[2],max_levels[2])))[0]
 
-    d = -1 # TODO DELETE THIS LINE
+    #d = -1 # TODO DELETE THIS LINE
     return d
 
 
 if __name__ == '__main__':
+
 
     with open('voters.txt') as csvfile:
         dialect = csv.Sniffer().sniff(csvfile.read(1024))
         csvfile.seek(0)
         reader = csv.DictReader(csvfile, dialect=dialect)
         voters_records = [record for record in reader]
+
+        #print (voters_records[0])
     # for record in voters_records:
     #    print(record['name'], record['gender'], record['age'], record['zipcode'])
 
@@ -136,14 +134,31 @@ if __name__ == '__main__':
         reader = csv.DictReader(csvfile, dialect=dialect)
         hospital_records = [record for record in reader]
 
+        age = []
+
+        for i in hospital_records:
+            age.append(i["age"])
+
+
+    print(generalize_zipcode("1170", 4))
+
+
     # Question 1
 
+    if (reidentify_patient(hospital_records[0])):
+        print("Information of the patient: {}".format(reidentify_patient(hospital_records[32])))
+    else:
+        print("There's no match on this patient, please try another one")
+
     # TODO print a list of all successfully re-identified patients with their name and disease
-    reidentify_patient(hospital_records,voters_records)
+
     # TODO print the successful re-identification rate as a percent
 
 
     # Questions 2 -> 6
+
+    # question 5
+    compute_distortion([1, 1, 2], [1, 3, 4])
 
     k_target = 5
 
