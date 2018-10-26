@@ -142,7 +142,7 @@ def compute_anonymity_level(records, quasi_identifiers):
                     if nr.__getitem__(i)[l2[ii]] == nr.__getitem__(x)[l2[ii]]:
                         temp_n+=1
                         if temp_n == 3:
-                            print ("Valeur identique: {} = {}".format(nr.__getitem__(i), nr.__getitem__(x)))
+                          #  print ("Valeur identique: {} = {}".format(nr.__getitem__(i), nr.__getitem__(x)))
                             n+=1
         k.append(n)
 
@@ -230,6 +230,14 @@ if __name__ == '__main__':
     level_age_opt = 1
     level_zipcode_opt = 2
 
+    params_max = (level_gender_max, level_age_max, level_zipcode_max)
+    for i in range(0,level_gender_max):
+        for j in range(0,level_age_max):
+            for m in range(0,level_zipcode_max):
+                params_opt = (i,j,m)
+                k_opt = compute_anonymity_level(generalize_database(hospital_records, level_gender_opt, level_age_opt, level_zipcode_opt), qid)
+                print('Optimal scheme (targeted k=%d): levels(gender,age,zipcode)=%s, distortion=%.2f, k=%d' % (k_target, str(params_opt), compute_distortion(params_opt, params_max), k_opt))
+
     # TODO Compute each possible generalization of hospital_records and pick the optimal one as described in the exercise
 
     # TODO Set variables opt_level_gender, opt_level_age, opt_level_zipcode with the found optimal generalization levels
@@ -239,7 +247,7 @@ if __name__ == '__main__':
     # TODO Uncomment the following two lines
 
 
-    params_opt = (1, 1, 2)
-    params_max =  (level_gender_max, level_age_max, level_zipcode_max)
-    k_opt = compute_anonymity_level(generalize_database(hospital_records, level_gender_opt, level_age_opt, level_zipcode_opt), qid)
-    print('Optimal scheme (targeted k=%d): levels(gender,age,zipcode)=%s, distortion=%.2f, k=%d' % (k_target, str(params_opt), compute_distortion(params_opt, params_max), k_opt))
+ #   params_opt = (1, 1, 2)
+ #   params_max =  (level_gender_max, level_age_max, level_zipcode_max)
+ #   k_opt = compute_anonymity_level(generalize_database(hospital_records, level_gender_opt, level_age_opt, level_zipcode_opt), qid)
+ #   print('Optimal scheme (targeted k=%d): levels(gender,age,zipcode)=%s, distortion=%.2f, k=%d' % (k_target, str(params_opt), compute_distortion(params_opt, params_max), k_opt))
