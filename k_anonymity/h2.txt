@@ -1,0 +1,1 @@
+Optimal scheme (targeted k=5): levels(gender,age,zipcode)=(0, 1, 2), distortion=0.28, k=11

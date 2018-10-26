@@ -15,9 +15,6 @@ def reidentify_patient(record_hospital):
     zipcode = record_hospital['zipcode']
     success = False
     data = ""
-    # TODO Find the matching record in voters that has the same gender,age and zipcode
-    # TODO If exactly one match found, re-identification is successful, set success_ variable to True; otherwise to False
-    # TODO Save the matching voting record in a variable called record_voter
 
     with open('voters.txt') as csvfile:
         dialect = csv.Sniffer().sniff(csvfile.read(1024))
@@ -69,7 +66,6 @@ def generalize_zipcode(zipcode: str, level: int):
     if level == 0:
         return zipcode
 
-    # TODO implement this method using the provided VGH
     elif 0 < level <= len(zipcode):
         ast = ""
         i=0
@@ -113,8 +109,6 @@ def compute_anonymity_level(records, quasi_identifiers):
             new_records[quasi_identifiers[ii]] = records.__getitem__(i)[v]
         nr.append(new_records)
 
-    print ("new record = {}".format(nr))
-
     # Get all the keys
     for i in nr:
         l = i.keys()
@@ -142,28 +136,20 @@ def compute_anonymity_level(records, quasi_identifiers):
                     if nr.__getitem__(i)[l2[ii]] == nr.__getitem__(x)[l2[ii]]:
                         temp_n+=1
                         if temp_n == 3:
-                          #  print ("Valeur identique: {} = {}".format(nr.__getitem__(i), nr.__getitem__(x)))
                             n+=1
         k.append(n)
 
-    #print ("K = {}".format(k))
+    # Retourne la valeur minimale de k
     return min(k)
 
 
 def compute_distortion(levels, max_levels):
     assert len(max_levels) == len(levels)
-    # TODO implement this method
-    # d = ...
-    #print(math.modf(Fraction(1, len(max_levels)) * (Fraction(levels[0], max_levels[0]) + Fraction(levels[1], max_levels[1]) + Fraction(levels[2],max_levels[2])))[0])
-    d = math.modf(Fraction(1, len(max_levels)) * (
-                Fraction(levels[0], max_levels[0]) + Fraction(levels[1], max_levels[1]) + Fraction(levels[2],
-                                                                                                   max_levels[2])))[0]
-
+    d = math.modf(Fraction(1, len(max_levels)) * (Fraction(levels[0], max_levels[0]) + Fraction(levels[1], max_levels[1]) + Fraction(levels[2],max_levels[2])))[0]
     return d
 
 
 if __name__ == '__main__':
-
 
     with open('voters.txt') as csvfile:
         dialect = csv.Sniffer().sniff(csvfile.read(1024))
@@ -171,10 +157,6 @@ if __name__ == '__main__':
         reader = csv.DictReader(csvfile, dialect=dialect)
         voters_records = [record for record in reader]
 
-
-        #print (voters_records[0])
-    # for record in voters_records:
-    #    print(record['name'], record['gender'], record['age'], record['zipcode'])
 
     with open('hospital_records.txt') as csvfile:
         dialect = csv.Sniffer().sniff(csvfile.read(1024))
@@ -187,42 +169,51 @@ if __name__ == '__main__':
             age.append(i["age"])
 
 
-    #Adding random values in order to compute anonymity level
+    # Question 1
+
+    #Patient 12 pris aléatoirement - Il est possible de réidentifier un autre patient en modifiant l'index de la liste hospital_records
+    if (reidentify_patient(hospital_records[12])):
+        print ("**** Question 1 ****")
+        print("Information of the patient: {}".format(reidentify_patient(hospital_records[12])))
+        print ("********\n")
+    else:
+        print("There's no match on this patient, please try another one")
+
+    # Question 3
+
+    # Generalization of a random patient (12)
+    print("**** Question 3 ****")
+    print (generalize_record(hospital_records[12],1, 1, 2))
+    print("********\n")
+
+    # Question 4
+    # Anonymity level of a random data set
+    # Adding random values in order to compute anonymity level
     liste = []
     liste.append(hospital_records[19])
     liste.append(hospital_records[1])
     liste.append(hospital_records[12])
     liste.append(hospital_records[4])
 
-
     qid = ["gender", "age", "zipcode"]
 
-    print ("The Anonymity level is {}".format(compute_anonymity_level(generalize_database(hospital_records, 0, 1, 2), qid)))
+    print("**** Question 4 ****")
+    print("The Anonymity level is {}".format(compute_anonymity_level(liste, qid)))
+    print("********\n")
 
-    print(generalize_zipcode("1170", 4))
+    #Question 5
 
-    #Question 6
-    #print ("Generalize db: {}".format(generalize_database(hospital_records, 1, 2, 2)))
+    print("**** Question 5 ****")
+    print("The Distortion with the specific values [1, 1, 2] and maximum values [1, 3, 4] is {}".format(compute_distortion([1, 1, 2], [1, 3, 4])))
+    print("********\n")
 
-    # Question 1
-
-    if (reidentify_patient(hospital_records[0])):
-        print("Information of the patient: {}".format(reidentify_patient(hospital_records[32])))
-    else:
-        print("There's no match on this patient, please try another one")
-
-    # TODO print a list of all successfully re-identified patients with their name and disease
-
-    # TODO print the successful re-identification rate as a percent
-
-
-    # Questions 2 -> 6
+    # Questions 6
 
     k_target = 5
 
-    level_gender_max = 1 # TODO Use the VGH to replace with the correct value
-    level_age_max =  3 # TODO Use the VGH to replace with the correct value
-    level_zipcode_max = 4  # TODO Use the VGH to replace with the correct value
+    level_gender_max = 1
+    level_age_max =  3
+    level_zipcode_max = 4
 
     level_gender_opt = 1
     level_age_opt = 1
@@ -232,6 +223,9 @@ if __name__ == '__main__':
     min_d = []
     min_k = []
     data_opt = []
+
+    print("**** Question 6 ****")
+    print ("Computing, please wait...")
     for i in range(0,level_gender_max+1):
         for j in range(0,level_age_max+1):
             for m in range(0,level_zipcode_max+1):
@@ -245,17 +239,3 @@ if __name__ == '__main__':
 
     index = min_d.index(min(min_d))
     print("{}".format(data_opt[index]))
-
-    # TODO Compute each possible generalization of hospital_records and pick the optimal one as described in the exercise
-
-    # TODO Set variables opt_level_gender, opt_level_age, opt_level_zipcode with the found optimal generalization levels
-    # TODO Set variable distortion_opt with the distorsion value of the optimal generalization
-    # TODO Set variable k_opt with the k-anonimity value of the optimal generalization
-
-    # TODO Uncomment the following two lines
-
-
- #   params_opt = (1, 1, 2)
- #   params_max =  (level_gender_max, level_age_max, level_zipcode_max)
- #   k_opt = compute_anonymity_level(generalize_database(hospital_records, level_gender_opt, level_age_opt, level_zipcode_opt), qid)
- #   print('Optimal scheme (targeted k=%d): levels(gender,age,zipcode)=%s, distortion=%.2f, k=%d' % (k_target, str(params_opt), compute_distortion(params_opt, params_max), k_opt))
