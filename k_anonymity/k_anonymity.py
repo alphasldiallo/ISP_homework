@@ -146,7 +146,7 @@ def compute_anonymity_level(records, quasi_identifiers):
                             n+=1
         k.append(n)
 
-    print ("K = {}".format(k))
+    #print ("K = {}".format(k))
     return min(k)
 
 
@@ -154,13 +154,11 @@ def compute_distortion(levels, max_levels):
     assert len(max_levels) == len(levels)
     # TODO implement this method
     # d = ...
-    print(math.modf(Fraction(1, len(max_levels)) * (
-                Fraction(levels[0], max_levels[0]) + Fraction(levels[1], max_levels[1]) + Fraction(levels[2],
-                                                                                                   max_levels[2])))[0])
+    #print(math.modf(Fraction(1, len(max_levels)) * (Fraction(levels[0], max_levels[0]) + Fraction(levels[1], max_levels[1]) + Fraction(levels[2],max_levels[2])))[0])
     d = math.modf(Fraction(1, len(max_levels)) * (
                 Fraction(levels[0], max_levels[0]) + Fraction(levels[1], max_levels[1]) + Fraction(levels[2],
                                                                                                    max_levels[2])))[0]
-    # d = -1 # TODO DELETE THIS LINE
+
     return d
 
 
@@ -199,12 +197,12 @@ if __name__ == '__main__':
 
     qid = ["gender", "age", "zipcode"]
 
-    print ("The Anonymity level is {}".format(compute_anonymity_level(generalize_database(hospital_records, 0, 0, 0), qid)))
+    print ("The Anonymity level is {}".format(compute_anonymity_level(generalize_database(hospital_records, 0, 1, 2), qid)))
 
     print(generalize_zipcode("1170", 4))
 
     #Question 6
-    print ("Generalize db: {}".format(generalize_database(hospital_records, 1, 2, 2)))
+    #print ("Generalize db: {}".format(generalize_database(hospital_records, 1, 2, 2)))
 
     # Question 1
 
@@ -231,12 +229,22 @@ if __name__ == '__main__':
     level_zipcode_opt = 2
 
     params_max = (level_gender_max, level_age_max, level_zipcode_max)
-    for i in range(0,level_gender_max):
-        for j in range(0,level_age_max):
-            for m in range(0,level_zipcode_max):
+    min_d = []
+    min_k = []
+    data_opt = []
+    for i in range(0,level_gender_max+1):
+        for j in range(0,level_age_max+1):
+            for m in range(0,level_zipcode_max+1):
                 params_opt = (i,j,m)
-                k_opt = compute_anonymity_level(generalize_database(hospital_records, level_gender_opt, level_age_opt, level_zipcode_opt), qid)
-                print('Optimal scheme (targeted k=%d): levels(gender,age,zipcode)=%s, distortion=%.2f, k=%d' % (k_target, str(params_opt), compute_distortion(params_opt, params_max), k_opt))
+                #print (params_opt)
+                k_opt = compute_anonymity_level(generalize_database(hospital_records, i, j, m), qid)
+                #print('Optimal scheme (targeted k=%d): levels(gender,age,zipcode)=%s, distortion=%.2f, k=%d' % (k_target, str(params_opt), compute_distortion(params_opt, params_max), k_opt))
+                if 5 < k_opt < 400:
+                    data_opt.append('Optimal scheme (targeted k=%d): levels(gender,age,zipcode)=%s, distortion=%.2f, k=%d' % (k_target, str(params_opt), compute_distortion(params_opt, params_max), k_opt))
+                    min_d.append(compute_distortion(params_opt, params_max))
+
+    index = min_d.index(min(min_d))
+    print("{}".format(data_opt[index]))
 
     # TODO Compute each possible generalization of hospital_records and pick the optimal one as described in the exercise
 
